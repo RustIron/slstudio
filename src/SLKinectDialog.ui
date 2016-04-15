@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>SLKinectDialog</class>
+ <widget class="QDialog" name="SLKinectDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>DepthMap</string>
   </property>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
@@ -29,7 +29,7 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="SLVideoWidget" name="videoWidget" native="true">
+  <widget class="SLVideoWidget" name="depthMap" native="true">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -42,7 +42,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="SLVideoWidget" name="videoWidget_2" native="true">
+  <widget class="SLVideoWidget" name="rgbMap" native="true">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -69,8 +69,8 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
+   <receiver>SLKinectDialog</receiver>
+   <slot>onActionOk()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>248</x>
@@ -85,8 +85,8 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
-   <slot>reject()</slot>
+   <receiver>SLKinectDialog</receiver>
+   <slot>onActionCancel()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>316</x>
@@ -99,4 +99,8 @@
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>onActionOk()</slot>
+  <slot>onActionCancel()</slot>
+ </slots>
 </ui>

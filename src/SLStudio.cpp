@@ -9,7 +9,7 @@
 #include "SLCalibrationDialog.h"
 #include "SLPreferenceDialog.h"
 #include "SLAboutDialog.h"
-
+#include "SLKinectDialog.h"
 #include "SLVideoWidget.h"
 
 #include <QtGui>
@@ -296,6 +296,10 @@ void SLStudio::onActionExportCalibration(){
 void SLStudio::onActionAbout(){
     SLAboutDialog *aboutDialog = new SLAboutDialog(this);
     aboutDialog->exec();
+}
+void SLStudio::onActionKinect(){
+    SLKinectDialog *kinectDialog = new SLKinectDialog(this);
+    kinectDialog->exec();
 }
 
 // Debuggings slots for plotting on the main thread

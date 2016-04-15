@@ -60,7 +60,6 @@ void SLVideoWidget::showFrame(CameraFrame frame){
 }
 
 void SLVideoWidget::showFrameCV(cv::Mat frame){
-
     QImage qimage = cvMat2qImage(frame);
 
     // correct size only if label has no borders/frame!

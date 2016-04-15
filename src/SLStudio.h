@@ -19,6 +19,7 @@
 #include "SLVideoDialog.h"
 #include "SLTrackerDialog.h"
 
+
 namespace Ui {
     class SLStudio;
 }
@@ -40,6 +41,7 @@ class SLStudio : public QMainWindow {
         void onActionLoadCalibration();
         void onActionPreferences();
         void onActionExportCalibration();
+        void onActionKinect();
 
         void updateDisplayRate();
         void receiveNewPointCloud(PointCloudConstPtr pointCloud);

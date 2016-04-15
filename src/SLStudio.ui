@@ -79,10 +79,17 @@
     </property>
     <addaction name="actionUpdatePointClouds"/>
    </widget>
+   <widget class="QMenu" name="menuKinect">
+    <property name="title">
+     <string>Kinect</string>
+    </property>
+    <addaction name="actionStartMapView"/>
+   </widget>
    <addaction name="menuSLStudio"/>
    <addaction name="menuScan"/>
    <addaction name="menuCalibration"/>
    <addaction name="menuView"/>
+   <addaction name="menuKinect"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="enabled">
@@ -211,6 +218,11 @@
    </property>
    <property name="text">
     <string>Update Point Clouds</string>
+   </property>
+  </action>
+  <action name="actionStartMapView">
+   <property name="text">
+    <string>StartMapView</string>
    </property>
   </action>
  </widget>
@@ -389,6 +401,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionStartMapView</sender>
+   <signal>triggered()</signal>
+   <receiver>SLStudio</receiver>
+   <slot>onActionKinect()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onActionStart()</slot>
@@ -403,5 +431,6 @@
   <slot>onActionAbout()</slot>
   <slot>onActionDecoderUp()</slot>
   <slot>onActionDecoderVp()</slot>
+  <slot>onActionKinect()</slot>
  </slots>
 </ui>

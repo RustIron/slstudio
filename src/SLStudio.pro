@@ -16,7 +16,8 @@ FORMS    += SLStudio.ui \
         SLCalibrationDialog.ui \
         SLVideoDialog.ui \
         SLAboutDialog.ui \
-        SLTrackerDialog.ui
+        SLTrackerDialog.ui \
+        SLKinectDialog.ui
 
 HEADERS  += SLStudio.h \
         SLVideoWidget.h \
@@ -34,6 +35,7 @@ HEADERS  += SLStudio.h \
         SLTrackerDialog.h \
         SLTriangulatorWorker.h \
         SLTraceWidget.h \
+        SLKinectDialog.h\
         camera/Camera.h \
         projector/Projector.h \
         projector/ProjectorOpenGL.h \
@@ -72,7 +74,10 @@ HEADERS  += SLStudio.h \
         tracker/CorrEstKdTreeFast.h \
         tracker/TrackerPCL.h \
         tracker/PoseFilter.h \
-        cvtools.h
+        cvtools.h \
+        Kinect/opencvgrabber.hpp \
+        Kinect/opennigrabber.hpp
+
 
 
 SOURCES += main.cpp \
@@ -92,6 +97,7 @@ SOURCES += main.cpp \
         SLTrackerDialog.cpp \
         SLTriangulatorWorker.cpp \
         SLTraceWidget.cpp \
+        SLKinectDialog.cpp \
         camera/Camera.cpp \
         projector/ProjectorOpenGL.cpp \
         codec/phaseunwrap.cpp \
@@ -121,9 +127,12 @@ SOURCES += main.cpp \
         tracker/TrackerNDT.cpp \
         tracker/CorrRejectOrgBoundFast.cpp \
         tracker/TrackerPCL.cpp \
-        tracker/PoseFilter.cpp
+        tracker/PoseFilter.cpp \
 
-INCLUDEPATH += camera/ projector/ codec/ triangulator/ calibrator/ tracker/
+
+
+
+INCLUDEPATH += camera/ projector/ codec/ triangulator/ calibrator/ tracker/ Kinect/
 
 RESOURCES += \
     SLResources.qrc
@@ -350,6 +359,14 @@ contains(DEFINES, WITH_CAMERAPOINTGREY) {
     SOURCES += camera/CameraPointGrey.cpp
 }
 
+# Kinect
+unix:!macs:exists(/usr/local/include/libfreenect/libfreenect.hpp){
+    INCLUDEPATH += /usr/local/include/libfreenect
+    DEFINES += WITH_KINECT
+    LIBS +=  -lfreenect
+}
+
+
 
 # Compile with direct projector APIs
 # LC3000 Api
@@ -378,4 +395,6 @@ win32{
     SOURCES += projector/LC4500API/hid.Win.c
     LIBS += -lsetupapi
 }
+
+
 

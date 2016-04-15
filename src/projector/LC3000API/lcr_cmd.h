@@ -56,9 +56,9 @@ extern "C" {
 
 	typedef enum
 	{
-		LED_RED,
-		LED_GREEN,
-		LED_BLUE,
+		LED_RED_,
+		LED_GREEN_,
+		LED_BLUE_,
 		LED_DEFAULT, //Only used for running custom sequence referred in Demo-8
 	} LCR_LEDSelect_t;
 

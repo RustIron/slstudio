@@ -54,7 +54,7 @@ ProjectorLC3000::ProjectorLC3000(unsigned int){
     patternSeqSettings.InputTriggerDelay = 0;
     patternSeqSettings.AutoTriggerPeriod = 0;
     patternSeqSettings.ExposureTime = 16666; //us
-    patternSeqSettings.LEDSelect = LED_RED;
+    patternSeqSettings.LEDSelect = LED_RED_;
     patternSeqSettings.Repeat = 1;
     res = LCR_CMD_SetPatternSeqSetting(&patternSeqSettings);
     HandleResult(res,"LCR_CMD_SetPatternSeqSetting()")

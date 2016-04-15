@@ -49,7 +49,7 @@ int main()
     LCR_GetLedCurrents(&Red, &Green, &Blue);
 
     // Set to pattern sequence mode
-    const bool patternSequenceMode = true;
+    const bool patternSequenceMode = false;
     if(!LCR_SetMode(patternSequenceMode)){
         showError("Error Setting Mode");
         return -1;
@@ -62,82 +62,85 @@ int main()
         return -1;
     }
 
-    // Clear the Pattern Sequence LUT
-    LCR_ClearPatLut();
 
-    // Add two patterns to LUT
-    const int TrigType = 1;
-    const int PatNum = 1;
-    const int BitDepth = 8;
-    const int LEDSelectRed = 1;
-    const bool InvertPat = false;
-    const bool InsertBlack = false;
-    const bool BufSwap = true;
-    const bool trigOutPrev = false;
-    if(LCR_AddToPatLut(TrigType, PatNum, BitDepth, LEDSelectRed, InvertPat, InsertBlack, BufSwap, trigOutPrev) == -1){
-        showError("Error Adding Pattern LUT");
-        return -1;
-    }
-    if(LCR_AddToPatLut(TrigType, PatNum, BitDepth, LEDSelectRed, InvertPat, InsertBlack, BufSwap, trigOutPrev) == -1){
-        showError("Error Adding Pattern LUT");
-        return -1;
-    }
 
-    unsigned char splashLut[64];
-    int numSplashLutEntries = 0;
-    const unsigned int frameIndexZero = 0;
-    splashLut[numSplashLutEntries++] = frameIndexZero;
+//    // Clear the Pattern Sequence LUT
+//    LCR_ClearPatLut();
 
-    // Configure pattern sequence mode
-    const unsigned int numLutEntries = 2;
-    const bool repeat = true;
-    const unsigned int numPatsForTrigOut2 = 2;
-    if(LCR_SetPatternConfig(numLutEntries, repeat, numPatsForTrigOut2, numSplashLutEntries) < 0){
-        showError("Error Sending Pattern Config");
-        return -1;
-    }
+//    // Add two patterns to LUT
+//    const int TrigType = 1;
+//    const int PatNum = 1;
+//    const int BitDepth = 8;
+//    const int LEDSelectRed = 1;
+//    const bool InvertPat = false;
+//    const bool InsertBlack = false;
+//    const bool BufSwap = true;
+//    const bool trigOutPrev = false;
+//    if(LCR_AddToPatLut(TrigType, PatNum, BitDepth, LEDSelectRed, InvertPat, InsertBlack, BufSwap, trigOutPrev) == -1){
+//        showError("Error Adding Pattern LUT");
+//        return -1;
+//    }
+//    if(LCR_AddToPatLut(TrigType, 1, BitDepth, LEDSelectRed, InvertPat, InsertBlack, BufSwap, trigOutPrev) == -1){
+//        showError("Error Adding Pattern LUT");
+//        return -1;
+//    }
 
-    // Set exposure, frame period, etc.
-    const unsigned int exposurePeriod = 8333; //us
-    const unsigned int framePeriod = 8333; //us
-    if(LCR_SetExpsosure_FramePeriod(exposurePeriod, framePeriod) < 0){
-        showError("Error Sending Exposure period");
-        return -1;
-    }
+//    unsigned char splashLut[64];
+//    int numSplashLutEntries = 0;
+//    const unsigned int frameIndexZero = 0;
+//    splashLut[numSplashLutEntries++] = frameIndexZero;
 
-    // Set the pattern trigger mode
-    const bool vsyncPatternTriggerMode = false;
-    if(LCR_SetPatternTriggerMode(vsyncPatternTriggerMode) < 0){
-        showError("Error Sending trigger Mode");
-        return -1;
-    }
+//    // Configure pattern sequence mode
+//    const unsigned int numLutEntries = 2;
+//    const bool repeat = true;
+//    const unsigned int numPatsForTrigOut2 = 2;
+//    if(LCR_SetPatternConfig(numLutEntries, repeat, numPatsForTrigOut2, numSplashLutEntries) < 0){
+//        showError("Error Sending Pattern Config");
+//        return -1;
+//    }
 
-    // Send LUT
-    if(LCR_SendPatLut() < 0){
-        showError("Error Sending Pattern LUT");
-        return -1;
-    }
+//    // Set exposure, frame period, etc.
+//    const unsigned int exposurePeriod = 8333; //us
+//    const unsigned int framePeriod = 8333; //us
+//    if(LCR_SetExpsosure_FramePeriod(exposurePeriod, framePeriod) < 0){
+//        showError("Error Sending Exposure period");
+//        return -1;
+//    }
 
-    // Send splash LUT
-    if(LCR_SendSplashLut(splashLut, numSplashLutEntries) < 0){
-        showError("Error Sending Splash LUT");
-        return -1;
-    }
+//    // Set the pattern trigger mode
+//    const bool vsyncPatternTriggerMode = false;
+//    if(LCR_SetPatternTriggerMode(vsyncPatternTriggerMode) < 0){
+//        showError("Error Sending trigger Mode");
+//        return -1;
+//    }
 
-    // Validate LUT data
-    unsigned int status;
-    if(LCR_ValidatePatLutData(&status) < 0){
-        showError("Error validating LUT data");
-        return -1;
-    }
+//    // Send LUT
+//    if(LCR_SendPatLut() < 0){
+//        showError("Error Sending Pattern LUT");
+//        return -1;
+//    }
 
-    // Start pattern sequence
-    if(LCR_PatternDisplay(2) < 0){
-        //Start pattern display
-        showError("Error starting pattern display");
-        return -1;
-    }
+//    // Send splash LUT
+//    if(LCR_SendSplashLut(splashLut, numSplashLutEntries) < 0){
+//        showError("Error Sending Splash LUT");
+//        return -1;
+//    }
 
+//    // Validate LUT data
+//    unsigned int status;
+//    if(LCR_ValidatePatLutData(&status) < 0){
+//        showError("Error validating LUT data");
+//        return -1;
+//    }
+
+//    // Start pattern sequence
+//    if(LCR_PatternDisplay(2) < 0){
+//        //Start pattern display
+//        showError("Error starting pattern display");
+//        return -1;
+//    }
+
+    LCR_SetInputSource(3,8);
     USB_Close();
 
     if(USB_Exit()){
