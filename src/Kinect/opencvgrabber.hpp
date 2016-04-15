@@ -7,7 +7,7 @@
 #include <pthread.h>
 #include <cv.h>
 #include <cxcore.h>
-//#include <highgui.h>
+
 
 
 using namespace cv;

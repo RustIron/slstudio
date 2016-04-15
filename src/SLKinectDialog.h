@@ -27,13 +27,16 @@ private slots:
 private:
     Ui::SLKinectDialog *ui;
     bool reviewMode;
-//    Mat depthMat;
-//    Mat depthf;
-//    Mat rgbMat;
-//    Mat ownMat;
+    bool isdevice;
     unsigned int delay; //ms
     int liveViewTimer;
-    Freenect::Freenect* freenect = new(Freenect::Freenect);
-    MyFreenectDevice& device = freenect->createDevice<MyFreenectDevice>(0);
+//    Freenect::Freenect* myfreenect_ = new(Freenect::Freenect);
+//    MyFreenectDevice* mydevice_ = & myfreenect_->createDevice<MyFreenectDevice>(0);
+//    static int x;
+    static Freenect::Freenect* myfreenect_;
+    static MyFreenectDevice*   mydevice_;
 };
+
+//    Freenect::Freenect* SLKinectDialog::myfreenect_ = new(Freenect::Freenect);
+//    MyFreenectDevice*   SLKinectDialog::mydevice_   = & myfreenect_->createDevice<MyFreenectDevice>(0);
 #endif // SLKINECTDIALOG_H

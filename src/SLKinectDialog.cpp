@@ -5,17 +5,20 @@
 
 #include <opencv2/opencv.hpp>
 #include "Kinect/opencvgrabber.hpp"
+
+
 SLKinectDialog::SLKinectDialog(SLStudio *parent) :QDialog(parent), ui(new Ui::SLKinectDialog) {
     ui->setupUi(this);
     setSizeGripEnabled(false);
     reviewMode = false;
-
-    device.startVideo();
-    device.startDepth();
+    isdevice   = false;
     delay = 33.333; //ms
-
-    liveViewTimer = startTimer(delay);
 }
+
+    Freenect::Freenect* SLKinectDialog::myfreenect_ = new(Freenect::Freenect);
+    MyFreenectDevice*   SLKinectDialog::mydevice_   = &myfreenect_->createDevice<MyFreenectDevice>(0);
+//    Freenect::Freenect* myfreenect_;
+//    MyFreenectDevice* mydevice_=&myfreenect_->createDevice<MyFreenectDevice>(0);
 
 SLKinectDialog::~SLKinectDialog()
 {
@@ -33,8 +36,8 @@ void SLKinectDialog::timerEvent(QTimerEvent *event){
     Mat depthf(cv::Size(640,480),CV_8UC1);
     Mat rgbMat(cv::Size(640,480),CV_8UC3,Scalar(0));
  //   Mat ownMat(cv::Size(640,480),CV_8UC3,Scalar(0));
-    device.getVideo(rgbMat);
-    device.getDepth(depthMat);
+    mydevice_->getVideo(rgbMat);
+    mydevice_->getDepth(depthMat);
 
     depthMat.convertTo(depthf, CV_8UC1, 255.0/2048.0);
 
@@ -51,17 +54,30 @@ void SLKinectDialog::closeEvent(QCloseEvent *)
 }
 void SLKinectDialog::onActionOk()
 {
-    if(reviewMode){
+    if(isdevice)
+    {
+        if(reviewMode){
         liveViewTimer = startTimer(delay);
         reviewMode = false;
         return;
-    }
+        }
       // Stop live view
-    killTimer(liveViewTimer);
-    reviewMode = true;
+        killTimer(liveViewTimer);
+        reviewMode = true;
+    }
+    else
+    {
+ //       freenect = new(Freenect::Freenect);
+ //       device   = &freenect->createDevice<MyFreenectDevice>(0);
+        mydevice_->startVideo();
+        mydevice_->startDepth();
+        liveViewTimer = startTimer(delay);
+        isdevice = true;
+    }
 }
 void SLKinectDialog::onActionCancel()
 {
-    device.stopVideo();
-    device.stopDepth();
+    mydevice_->stopVideo();
+    mydevice_->stopDepth();
+    isdevice = false;
 }
