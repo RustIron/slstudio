@@ -1,0 +1,5 @@
+#ifndef OPENCVGRABBER
+#define OPENCVGRABBER
+
+#endif // OPENCVGRABBER
+
