@@ -18,7 +18,7 @@
 #include "SLPointCloudWidget.h"
 #include "SLVideoDialog.h"
 #include "SLTrackerDialog.h"
-
+#include "Kinect/opennigrabber.h"
 
 namespace Ui {
     class SLStudio;
@@ -42,9 +42,12 @@ class SLStudio : public QMainWindow {
         void onActionPreferences();
         void onActionExportCalibration();
         void onActionKinect();
+        void onActionStartPointView();
+        void onActionStopPointView();
 
         void updateDisplayRate();
         void receiveNewPointCloud(PointCloudConstPtr pointCloud);
+        void receiveNewRGBAPointCloud(RGBAPointCloudConstPtr RGBApointCloud);
 
         void imshow(const char* windowName, cv::Mat im, unsigned int x, unsigned int y);
         void hist(const char* windowName, cv::Mat im, unsigned int x, unsigned int y);
@@ -72,6 +75,9 @@ signals:
 
         SLTriangulatorWorker *triangulatorWorker;
         QThread *triangulatorThread;
+
+        myOpenNIViewer *PointCloudGrabber;
+        QThread *PointCloudGrabberThread;
 
         QTime *time;
         QSettings *settings;

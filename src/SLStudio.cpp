@@ -128,6 +128,7 @@ void SLStudio::onActionStart(){
     qRegisterMetaType< std::vector<cv::Mat> >("std::vector<cv::Mat>");
     qRegisterMetaType< PointCloudConstPtr >("PointCloudConstPtr");
 
+
     // Inter thread connections
     connect(scanWorker, SIGNAL(showHistogram(cv::Mat)), this, SLOT(onShowHistogram(cv::Mat)));
     connect(scanWorker, SIGNAL(newFrameSeq(std::vector<cv::Mat>)), decoderWorker, SLOT(decodeSequence(std::vector<cv::Mat>)));
@@ -159,6 +160,28 @@ void SLStudio::onActionStart(){
     ui->actionSaveScreenshot->setEnabled(true);
     ui->actionCalibration->setEnabled(false);
 
+}
+
+void SLStudio::onActionStartPointView()
+{
+    qRegisterMetaType< RGBAPointCloudConstPtr >("RGBAPointCloudConstPtr");
+
+    PointCloudGrabber = new myOpenNIViewer();
+    PointCloudGrabberThread = new QThread(this);
+    PointCloudGrabberThread->setObjectName("PointCloudGrabberThread");
+    PointCloudGrabber->moveToThread(PointCloudGrabberThread);
+    connect(PointCloudGrabber,SIGNAL(newPointCloud(RGBAPointCloudConstPtr)),this,SLOT(receiveNewRGBAPointCloud(RGBAPointCloudConstPtr)));
+    connect(PointCloudGrabberThread,SIGNAL(started()),PointCloudGrabber,SLOT(startWork()));
+    connect(PointCloudGrabberThread,SIGNAL(finished()),PointCloudGrabber,SLOT(stopWork()));
+    PointCloudGrabberThread->start(QThread::TimeCriticalPriority);
+//    PointCloudGrabber->startWork();
+}
+
+void SLStudio::onActionStopPointView()
+{
+//    PointCloudGrabber->stopWork();
+    PointCloudGrabberThread->quit();
+    PointCloudGrabberThread->wait();
 }
 
 void SLStudio::onActionStop(){
@@ -231,6 +254,14 @@ void SLStudio::receiveNewPointCloud(PointCloudConstPtr pointCloud){
 
     if(trackerDialog->isVisible())
         trackerDialog->receiveNewPointCloud(pointCloud);
+}
+
+void SLStudio::receiveNewRGBAPointCloud(RGBAPointCloudConstPtr RGBApointCloud){
+    if(ui->actionUpdatePointClouds->isChecked())
+        ui->pointCloudWidget->updateRGBAPointCloud(RGBApointCloud);
+
+//    if(trackerDialog->isVisible())
+//        trackerDialog->receiveNewPointCloud(pointCloud);
 }
 
 void SLStudio::closeEvent(QCloseEvent *event){

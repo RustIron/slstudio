@@ -15,8 +15,8 @@ SLKinectDialog::SLKinectDialog(SLStudio *parent) :QDialog(parent), ui(new Ui::SL
     delay = 33.333; //ms
 }
 
-    Freenect::Freenect* SLKinectDialog::myfreenect_ = new(Freenect::Freenect);
-    MyFreenectDevice*   SLKinectDialog::mydevice_   = &myfreenect_->createDevice<MyFreenectDevice>(0);
+//    Freenect::Freenect* SLKinectDialog::myfreenect_ = new(Freenect::Freenect);
+//    MyFreenectDevice*   SLKinectDialog::mydevice_   = &myfreenect_->createDevice<MyFreenectDevice>(0);
 //    Freenect::Freenect* myfreenect_;
 //    MyFreenectDevice* mydevice_=&myfreenect_->createDevice<MyFreenectDevice>(0);
 
@@ -67,8 +67,8 @@ void SLKinectDialog::onActionOk()
     }
     else
     {
- //       freenect = new(Freenect::Freenect);
- //       device   = &freenect->createDevice<MyFreenectDevice>(0);
+        myfreenect_ = new(Freenect::Freenect);
+        mydevice_   = &myfreenect_->createDevice<MyFreenectDevice>(0);
         mydevice_->startVideo();
         mydevice_->startDepth();
         liveViewTimer = startTimer(delay);

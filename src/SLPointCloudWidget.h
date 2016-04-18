@@ -21,6 +21,7 @@
 
 typedef pcl::PointCloud<pcl::PointXYZRGB>::Ptr PointCloudPtr;
 typedef pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr PointCloudConstPtr;
+typedef pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr RGBAPointCloudConstPtr;
 
 class SLPointCloudWidget : public QVTKWidget {
     Q_OBJECT
@@ -31,6 +32,7 @@ class SLPointCloudWidget : public QVTKWidget {
         void keyPressEvent(QKeyEvent *event);
     public slots:
         void updatePointCloud(PointCloudConstPtr _pointCloudPCL);
+        void updateRGBAPointCloud(RGBAPointCloudConstPtr _RGBACloudPCL);
         void savePointCloud();
         void saveScreenShot();
         void updateCalibration();
@@ -39,10 +41,12 @@ class SLPointCloudWidget : public QVTKWidget {
     private:
         pcl::visualization::PCLVisualizer *visualizer;
         PointCloudConstPtr pointCloudPCL;
+        RGBAPointCloudConstPtr RGBAPointCloudPCL;
         pcl::visualization::PointCloudColorHandler<pcl::PointXYZRGB>* colorHandler;
         bool surfaceReconstruction;
         pcl::OrganizedFastMesh<pcl::PointXYZRGB> *reconstructor;
         QTime time;
+        bool CordAdjust;
 };
 
 #endif // SLPOINTCLOUDWIDGET_H

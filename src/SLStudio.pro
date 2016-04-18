@@ -76,7 +76,7 @@ HEADERS  += SLStudio.h \
         tracker/PoseFilter.h \
         cvtools.h \
         Kinect/opencvgrabber.hpp \
-        Kinect/opennigrabber.hpp
+    Kinect/opennigrabber.h
 
 
 
@@ -145,7 +145,7 @@ unix:!macx {
     INCLUDEPATH += /usr/include/vtk-5.10/
     LIBS += -lQVTK -lvtkCommon -lvtkFiltering -lvtkRendering -lvtkIO -lvtkGraphics -lvtkHybrid
     # PCL pkg-config workaround
-    LIBS += -lboost_system -lpcl_visualization -lpcl_common -lpcl_io -lpcl_search -lpcl_surface
+    LIBS += -lboost_system -lpcl_visualization -lpcl_common -lpcl_io -lpcl_search -lpcl_surface -lboost_thread
     # PKG-config libs
     INCLUDEPATH += /usr/include/pcl-1.7 /usr/include/eigen3/
     PKGCONFIG += opencv pcl_registration-1.7 pcl_visualization-1.7 pcl_surface-1.7 pcl_search-1.7 pcl_filters-1.7 pcl_kdtree-1.7 pcl_tracking-1.7 flann eigen3

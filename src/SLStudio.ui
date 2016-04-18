@@ -84,6 +84,9 @@
      <string>Kinect</string>
     </property>
     <addaction name="actionStartMapView"/>
+    <addaction name="actionStartPointView"/>
+    <addaction name="separator"/>
+    <addaction name="actionStopPointView"/>
    </widget>
    <addaction name="menuSLStudio"/>
    <addaction name="menuScan"/>
@@ -223,6 +226,16 @@
   <action name="actionStartMapView">
    <property name="text">
     <string>StartMapView</string>
+   </property>
+  </action>
+  <action name="actionStartPointView">
+   <property name="text">
+    <string>StartPointView</string>
+   </property>
+  </action>
+  <action name="actionStopPointView">
+   <property name="text">
+    <string>StopPointView</string>
    </property>
   </action>
  </widget>
@@ -417,6 +430,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionStartPointView</sender>
+   <signal>triggered()</signal>
+   <receiver>SLStudio</receiver>
+   <slot>onActionStartPointView()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionStopPointView</sender>
+   <signal>triggered()</signal>
+   <receiver>SLStudio</receiver>
+   <slot>onActionStopPointView()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>411</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onActionStart()</slot>
@@ -432,5 +477,7 @@
   <slot>onActionDecoderUp()</slot>
   <slot>onActionDecoderVp()</slot>
   <slot>onActionKinect()</slot>
+  <slot>onActionStartPointView()</slot>
+  <slot>onActionStopPointView()</slot>
  </slots>
 </ui>

@@ -32,9 +32,11 @@ private:
     int liveViewTimer;
 //    Freenect::Freenect* myfreenect_ = new(Freenect::Freenect);
 //    MyFreenectDevice* mydevice_ = & myfreenect_->createDevice<MyFreenectDevice>(0);
+        Freenect::Freenect* myfreenect_;
+        MyFreenectDevice* mydevice_;
 //    static int x;
-    static Freenect::Freenect* myfreenect_;
-    static MyFreenectDevice*   mydevice_;
+//    static Freenect::Freenect* myfreenect_;
+//    static MyFreenectDevice*   mydevice_;
 };
 
 //    Freenect::Freenect* SLKinectDialog::myfreenect_ = new(Freenect::Freenect);

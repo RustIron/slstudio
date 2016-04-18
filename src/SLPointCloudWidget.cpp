@@ -27,7 +27,7 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 
-SLPointCloudWidget::SLPointCloudWidget(QWidget *parent) : QVTKWidget(parent), surfaceReconstruction(false) {
+SLPointCloudWidget::SLPointCloudWidget(QWidget *parent) : QVTKWidget(parent), surfaceReconstruction(false),CordAdjust(true) {
 
     visualizer = new pcl::visualization::PCLVisualizer("PCLVisualizer", false);
     this->SetRenderWindow(visualizer->getRenderWindow());
@@ -38,7 +38,7 @@ SLPointCloudWidget::SLPointCloudWidget(QWidget *parent) : QVTKWidget(parent), su
 
     // Create point cloud viewport
     visualizer->setBackgroundColor(255, 255, 255);
-    visualizer->addCoordinateSystem(50, 0);
+//    visualizer->addCoordinateSystem(50, 0);
     visualizer->setCameraPosition(0,0,-50,0,0,0,0,-1,0);
     visualizer->setCameraClipDistances(0.1, 10000);
     // Initialize point cloud color handler
@@ -59,7 +59,7 @@ void SLPointCloudWidget::updateCalibration(){
     calibration.load("calibration.xml");
 
     // Camera coordinate system
-    visualizer->addCoordinateSystem(50, "camera", 0);
+//    visualizer->addCoordinateSystem(50, "camera", 0);
 
     // Projector coordinate system
     cv::Mat TransformPCV(3, 4, CV_32F);
@@ -68,7 +68,7 @@ void SLPointCloudWidget::updateCalibration(){
     Eigen::Affine3f TransformP;
     cv::cv2eigen(TransformPCV, TransformP.matrix());
 
-    visualizer->addCoordinateSystem(50, TransformP.inverse(), "projector", 0);
+//    visualizer->addCoordinateSystem(50, TransformP.inverse(), "projector", 0);
 }
 
 void SLPointCloudWidget::keyPressEvent(QKeyEvent *event){
@@ -99,7 +99,6 @@ void SLPointCloudWidget::keyPressEvent(QKeyEvent *event){
 }
 
 void SLPointCloudWidget::updatePointCloud(PointCloudConstPtr _pointCloudPCL){
-
     if(!_pointCloudPCL || _pointCloudPCL->points.empty())
         return;
 
@@ -127,6 +126,25 @@ void SLPointCloudWidget::updatePointCloud(PointCloudConstPtr _pointCloudPCL){
     emit newPointCloudDisplayed();
 
 //    std::cout << "PCL Widget: " << time.restart() << "ms" << std::endl;
+}
+
+void SLPointCloudWidget::updateRGBAPointCloud(RGBAPointCloudConstPtr _RGBACloudPCL){
+
+    if(CordAdjust)
+    {
+//         visualizer->removeCoordinateSystem("Camera",0);
+//         visualizer->removeCoordinateSystem("Projector",0);
+    }
+    if(!_RGBACloudPCL || _RGBACloudPCL->points.empty())
+        return;
+    RGBAPointCloudPCL = _RGBACloudPCL;
+    if(!visualizer->updatePointCloud(RGBAPointCloudPCL,"RGBAPointCloud")){
+        visualizer->addPointCloud(RGBAPointCloudPCL,"RGBAPointCloud");
+        visualizer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,1.0,"RGBAPointCloud");
+    }
+    this->update();
+    CordAdjust = false;
+    emit newPointCloudDisplayed();
 }
 
 void SLPointCloudWidget::savePointCloud(){
