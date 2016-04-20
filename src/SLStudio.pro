@@ -76,7 +76,9 @@ HEADERS  += SLStudio.h \
         tracker/PoseFilter.h \
         cvtools.h \
         Kinect/opencvgrabber.hpp \
-    Kinect/opennigrabber.h
+        Kinect/opennigrabber.h \
+ #       PCLProcessor/SACSegmenter.h \
+        SLPointcloudprocessor.h
 
 
 
@@ -128,7 +130,8 @@ SOURCES += main.cpp \
         tracker/CorrRejectOrgBoundFast.cpp \
         tracker/TrackerPCL.cpp \
         tracker/PoseFilter.cpp \
-
+        SLPointcloudprocessor.cpp
+ #      PCLProcessor/SACSegmenter.cpp
 
 
 
@@ -148,7 +151,9 @@ unix:!macx {
     LIBS += -lboost_system -lpcl_visualization -lpcl_common -lpcl_io -lpcl_search -lpcl_surface -lboost_thread
     # PKG-config libs
     INCLUDEPATH += /usr/include/pcl-1.7 /usr/include/eigen3/
-    PKGCONFIG += opencv pcl_registration-1.7 pcl_visualization-1.7 pcl_surface-1.7 pcl_search-1.7 pcl_filters-1.7 pcl_kdtree-1.7 pcl_tracking-1.7 flann eigen3
+    PKGCONFIG += opencv pcl_registration-1.7 pcl_visualization-1.7 pcl_surface-1.7\
+                 pcl_search-1.7 pcl_filters-1.7 pcl_kdtree-1.7 pcl_tracking-1.7 pcl_segmentation-1.7 \
+                 flann eigen3
 }
 # Windows
 win32 {

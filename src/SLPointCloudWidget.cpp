@@ -27,7 +27,7 @@
 #include <QFileDialog>
 #include <QKeyEvent>
 
-SLPointCloudWidget::SLPointCloudWidget(QWidget *parent) : QVTKWidget(parent), surfaceReconstruction(false),CordAdjust(true) {
+SLPointCloudWidget::SLPointCloudWidget(QWidget *parent) : QVTKWidget(parent), surfaceReconstruction(false){
 
     visualizer = new pcl::visualization::PCLVisualizer("PCLVisualizer", false);
     this->SetRenderWindow(visualizer->getRenderWindow());
@@ -130,11 +130,6 @@ void SLPointCloudWidget::updatePointCloud(PointCloudConstPtr _pointCloudPCL){
 
 void SLPointCloudWidget::updateRGBAPointCloud(RGBAPointCloudConstPtr _RGBACloudPCL){
 
-    if(CordAdjust)
-    {
-//         visualizer->removeCoordinateSystem("Camera",0);
-//         visualizer->removeCoordinateSystem("Projector",0);
-    }
     if(!_RGBACloudPCL || _RGBACloudPCL->points.empty())
         return;
     RGBAPointCloudPCL = _RGBACloudPCL;
@@ -143,7 +138,6 @@ void SLPointCloudWidget::updateRGBAPointCloud(RGBAPointCloudConstPtr _RGBACloudP
         visualizer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,1.0,"RGBAPointCloud");
     }
     this->update();
-    CordAdjust = false;
     emit newPointCloudDisplayed();
 }
 

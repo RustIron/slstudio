@@ -24,13 +24,15 @@ typedef pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr RGBAPointCloudConstPtr;
     void newPointCloud(const RGBAPointCloudConstPtr &cloud);
 
  public slots:
-    void startWork(){
+    void setup(){
         interface = new pcl::OpenNIGrabber();
         boost::function<void (const RGBAPointCloudConstPtr&)> f =
         boost::bind (&myOpenNIViewer::cloud_cb_, this, _1);
         interface->registerCallback (f);
         interface->start();
         isWorking = true;
+    }
+    void startWork(){
         while(isWorking){
         boost::this_thread::sleep (boost::posix_time::seconds (1));
         }

@@ -46,7 +46,6 @@ class SLPointCloudWidget : public QVTKWidget {
         bool surfaceReconstruction;
         pcl::OrganizedFastMesh<pcl::PointXYZRGB> *reconstructor;
         QTime time;
-        bool CordAdjust;
 };
 
 #endif // SLPOINTCLOUDWIDGET_H

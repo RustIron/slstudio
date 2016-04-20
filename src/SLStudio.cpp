@@ -170,10 +170,20 @@ void SLStudio::onActionStartPointView()
     PointCloudGrabberThread = new QThread(this);
     PointCloudGrabberThread->setObjectName("PointCloudGrabberThread");
     PointCloudGrabber->moveToThread(PointCloudGrabberThread);
+
+    PointCloudProcessor = new SLPointCloudProcessor();
+    PointCloudProcessorThread = new QThread(this);
+    PointCloudProcessorThread->setObjectName("PointCloudProcessorThread");
+    PointCloudProcessor->moveToThread(PointCloudProcessorThread);
+    QMetaObject::invokeMethod(PointCloudGrabber,"setup");
+
     connect(PointCloudGrabber,SIGNAL(newPointCloud(RGBAPointCloudConstPtr)),this,SLOT(receiveNewRGBAPointCloud(RGBAPointCloudConstPtr)));
+    connect(PointCloudGrabber,SIGNAL(newPointCloud(RGBAPointCloudConstPtr)),PointCloudProcessor,SLOT(receiveNewRGBAPointCloud(RGBAPointCloudConstPtr)));
+//    connect(PointCloudProcessor,SIGNAL(NewpointcloudProcessed(RGBAPointCloudConstPtr)),this,SLOT(receiveNewRGBAPointCloud(RGBAPointCloudConstPtr)));
     connect(PointCloudGrabberThread,SIGNAL(started()),PointCloudGrabber,SLOT(startWork()));
     connect(PointCloudGrabberThread,SIGNAL(finished()),PointCloudGrabber,SLOT(stopWork()));
     PointCloudGrabberThread->start(QThread::TimeCriticalPriority);
+    PointCloudProcessorThread->start(QThread::LowPriority);
 //    PointCloudGrabber->startWork();
 }
 

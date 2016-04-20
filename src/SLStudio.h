@@ -19,6 +19,7 @@
 #include "SLVideoDialog.h"
 #include "SLTrackerDialog.h"
 #include "Kinect/opennigrabber.h"
+#include "SLPointcloudprocessor.h"
 
 namespace Ui {
     class SLStudio;
@@ -78,6 +79,9 @@ signals:
 
         myOpenNIViewer *PointCloudGrabber;
         QThread *PointCloudGrabberThread;
+
+        SLPointCloudProcessor *PointCloudProcessor;
+        QThread *PointCloudProcessorThread;
 
         QTime *time;
         QSettings *settings;
