@@ -32,7 +32,7 @@ private:
     pcl::SACSegmentation<pcl::PointXYZ> seg;
     QTime time;
     QMutex pointcloudMutex;
-    pcl::visualization::CloudViewer viewer;
+//    pcl::visualization::CloudViewer viewer;
 };
 
 

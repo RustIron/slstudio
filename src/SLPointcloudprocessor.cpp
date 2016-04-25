@@ -1,8 +1,7 @@
 #include "SLPointcloudprocessor.h"
 
 SLPointCloudProcessor::SLPointCloudProcessor():cloud(new pcl::PointCloud<pcl::PointXYZ>),
-                                         RGBAcloud(new pcl::PointCloud<pcl::PointXYZRGBA>),
-                                         viewer("viewer")
+                                         RGBAcloud(new pcl::PointCloud<pcl::PointXYZRGBA>)
 {
     seg.setOptimizeCoefficients (true);
     // Mandatory
@@ -12,12 +11,12 @@ SLPointCloudProcessor::SLPointCloudProcessor():cloud(new pcl::PointCloud<pcl::Po
 }
 void SLPointCloudProcessor::receiveNewRGBAPointCloud(RGBAPointCloudConstPtr cloud_){
 //    std::cout<<"to be filtered , received"<<std::endl;
-    pointcloudMutex.lock();
+   if( pointcloudMutex.tryLock()){
 //    time.start();
     pcl::copyPointCloud(*cloud_,*RGBAcloud);
     pcl::copyPointCloud(*RGBAcloud,*cloud);
 //    int t = time.elapsed();
-//    std::cout<<"copied"<<t<<std::endl;
+
 
 //    time.start();
     pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
@@ -34,11 +33,12 @@ void SLPointCloudProcessor::receiveNewRGBAPointCloud(RGBAPointCloudConstPtr clou
     extract.filter(*RGBAcloud);
 //    t = time.elapsed();
 //    std::cout<<"filter ok"<<t<<std::endl;
+//    std::cout<<RGBAcloud->size()<<std::endl;
+    emit NewpointcloudProcessed(RGBAcloud);
     pointcloudMutex.unlock();
-//    emit NewpointcloudProcessed(RGBAcloud);
-
-    while(!viewer.wasStopped())
-    {
-        viewer.showCloud(RGBAcloud);
-    }
+    std::cout<<"processed"<<std::endl;
+   }
+   else{
+       std::cout<<"lock failed"<<std::endl;
+   }
 }

@@ -4,7 +4,8 @@
  #include <pcl/io/openni_grabber.h>
  #include <pcl/visualization/cloud_viewer.h>
  #include <QObject>
- #include <QThread>
+// #include <QThread>
+
 typedef pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr RGBAPointCloudConstPtr;
 
  class myOpenNIViewer:public QObject
@@ -15,9 +16,11 @@ typedef pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr RGBAPointCloudConstPtr;
    myOpenNIViewer():isWorking(false){}
    void cloud_cb_ (const RGBAPointCloudConstPtr &cloud)
    {
+       cloud_mutex.lock();
 //       if (!viewer.wasStopped())
 //         viewer.showCloud(cloud);
         emit newPointCloud(cloud);
+       cloud_mutex.unlock();
    }
   ~myOpenNIViewer(){}
  signals:
@@ -45,6 +48,7 @@ typedef pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr RGBAPointCloudConstPtr;
  private:
      pcl::Grabber* interface;
      bool isWorking;
+     boost::mutex cloud_mutex;
 //     pcl::visualization::CloudViewer viewer;
  };
 #endif
