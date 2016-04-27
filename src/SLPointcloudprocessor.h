@@ -23,15 +23,18 @@ public:
     explicit SLPointCloudProcessor();
 signals:
     void NewpointcloudProcessed(RGBAPointCloudConstPtr RGBAcloud);
+    void PointCloudProccessing(bool processing);
 private slots:
-    void receiveNewRGBAPointCloud(RGBAPointCloudConstPtr cloud_);
+    void setup();
+    void receiveNewRGBAPointCloud(RGBAPointCloudPtr cloud_);
 private:
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud ;
     pcl::PointCloud<pcl::PointXYZRGBA>::Ptr RGBAcloud ;
     // Create the segmentation object
     pcl::SACSegmentation<pcl::PointXYZ> seg;
+    bool processing;
     QTime time;
-    QMutex pointcloudMutex;
+    bool busy;
 //    pcl::visualization::CloudViewer viewer;
 };
 

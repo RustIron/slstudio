@@ -7,24 +7,25 @@
 // #include <QThread>
 
 typedef pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr RGBAPointCloudConstPtr;
-
+typedef pcl::PointCloud<pcl::PointXYZRGBA>::Ptr RGBAPointCloudPtr;
  class myOpenNIViewer:public QObject
  {
    Q_OBJECT
 
  public:
-   myOpenNIViewer():isWorking(false){}
+   myOpenNIViewer():isWorking(false),cloud_to_process(new pcl::PointCloud<pcl::PointXYZRGBA>){}
    void cloud_cb_ (const RGBAPointCloudConstPtr &cloud)
    {
-       cloud_mutex.lock();
-//       if (!viewer.wasStopped())
-//         viewer.showCloud(cloud);
-        emit newPointCloud(cloud);
+       if(cloud_mutex.try_lock()){
+       *(this->cloud_to_process) = *cloud;
        cloud_mutex.unlock();
+       std::cout<<"raw point cloud emmited    "<<cloud_to_process->size()<<"    point"<<endl;
+       emit(newPointCloud(this->cloud_to_process));
+       }
    }
   ~myOpenNIViewer(){}
  signals:
-    void newPointCloud(const RGBAPointCloudConstPtr &cloud);
+    void newPointCloud(const RGBAPointCloudPtr &cloud);
 
  public slots:
     void setup(){
@@ -49,6 +50,7 @@ typedef pcl::PointCloud<pcl::PointXYZRGBA>::ConstPtr RGBAPointCloudConstPtr;
      pcl::Grabber* interface;
      bool isWorking;
      boost::mutex cloud_mutex;
+     RGBAPointCloudPtr cloud_to_process;
 //     pcl::visualization::CloudViewer viewer;
  };
 #endif

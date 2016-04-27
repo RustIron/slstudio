@@ -1,22 +1,36 @@
 #include "SLPointcloudprocessor.h"
 
 SLPointCloudProcessor::SLPointCloudProcessor():cloud(new pcl::PointCloud<pcl::PointXYZ>),
-                                         RGBAcloud(new pcl::PointCloud<pcl::PointXYZRGBA>)
+                                         RGBAcloud(new pcl::PointCloud<pcl::PointXYZRGBA>),processing(false)
 {
+
+}
+
+
+
+void SLPointCloudProcessor::setup(){
     seg.setOptimizeCoefficients (true);
     // Mandatory
     seg.setModelType (pcl::SACMODEL_PLANE);
     seg.setMethodType (pcl::SAC_RANSAC);
     seg.setDistanceThreshold (0.01);
 }
-void SLPointCloudProcessor::receiveNewRGBAPointCloud(RGBAPointCloudConstPtr cloud_){
-//    std::cout<<"to be filtered , received"<<std::endl;
-   if( pointcloudMutex.tryLock()){
-//    time.start();
+void SLPointCloudProcessor::receiveNewRGBAPointCloud(RGBAPointCloudPtr cloud_){
+    // Recursively call self until latest event is hit
+    busy = true;
+    QCoreApplication::sendPostedEvents(this, QEvent::MetaCall);
+    bool result = busy;
+    busy = false;
+    if(!result){
+        std::cerr << "SLPointCloudProcessor: dropped Point Cloud!" << std::endl;
+        return;
+    }
+    std::cout<<"to be filtered , received"<<std::endl;
+    if(cloud_->points.empty()){std::cout<<"no Point"<<std::endl; return;}
+////    time.start();
     pcl::copyPointCloud(*cloud_,*RGBAcloud);
     pcl::copyPointCloud(*RGBAcloud,*cloud);
 //    int t = time.elapsed();
-
 
 //    time.start();
     pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients);
@@ -34,11 +48,6 @@ void SLPointCloudProcessor::receiveNewRGBAPointCloud(RGBAPointCloudConstPtr clou
 //    t = time.elapsed();
 //    std::cout<<"filter ok"<<t<<std::endl;
 //    std::cout<<RGBAcloud->size()<<std::endl;
-    emit NewpointcloudProcessed(RGBAcloud);
-    pointcloudMutex.unlock();
     std::cout<<"processed"<<std::endl;
-   }
-   else{
-       std::cout<<"lock failed"<<std::endl;
-   }
+    emit NewpointcloudProcessed(RGBAcloud);
 }
